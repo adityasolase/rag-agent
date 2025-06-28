@@ -22,14 +22,21 @@ app = FastAPI(
 )
 
 frontend_urls = [
-    os.getenv("FRONTEND_URL", "https://rag-agent-pi.vercel.app/")
+    "https://rag-agent-pi.vercel.app",
 ]
+
+env_url = os.getenv("FRONTEND_URL")
+if env_url:
+    frontend_urls.append(env_url.rstrip('/'))
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=frontend_urls,  
+    allow_origins=frontend_urls,
+    allow_origin_regex=r"https://(.*\.)?vercel\.app",  
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
+    max_age=86400,  
 )
 logger.info("CORS middleware configured for frontend URLs: %s", frontend_urls)
 
