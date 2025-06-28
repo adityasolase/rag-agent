@@ -5,7 +5,7 @@ import {
 
 const ChartOutput = ({ labels, data }) => {
   if (!labels?.length || !data?.length) {
-    return <div className="alert alert-warning mt-4">⚠️ No chart data to display.</div>;
+    return <div className="alert alert-warning mt-4">No chart data to display.</div>;
   }
 
   const chartData = labels.map((label, i) => ({

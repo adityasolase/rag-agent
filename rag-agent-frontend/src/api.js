@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
+const API_BASE_URL = window._env_?.API_URL || process.env.REACT_APP_API_URL;
 
-// Send query to backend and return response
 export const queryBackend = async (query) => {
   try {
     const response = await axios.post(`${API_BASE_URL}/api/query`, { query });

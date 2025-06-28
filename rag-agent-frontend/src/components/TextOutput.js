@@ -3,9 +3,9 @@ import React from 'react';
 const TextOutput = ({ text }) => {
   const renderText = () => {
     if (typeof text === 'object') {
-      return <pre>{JSON.stringify(text, null, 2)}</pre>; // Safely render object
+      return <pre>{JSON.stringify(text, null, 2)}</pre>; 
     }
-    return text; // Render plain string
+    return text; 
   };
 
   return (

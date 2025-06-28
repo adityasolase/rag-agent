@@ -18,7 +18,7 @@ function App() {
     try {
       const result = await queryBackend(query);
 
-      // Check if valid type
+      
       if (result?.type === "text" || result?.type === "chart" || result?.type === "table") {
         setResponse(result);
       } else {
