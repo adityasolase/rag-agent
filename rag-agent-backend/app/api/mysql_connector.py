@@ -1,11 +1,31 @@
 import pymysql
+import os
+from urllib.parse import urlparse
 
 def connect_db():
+    db_url = os.getenv("MYSQL_URI", "mysql+pymysql://root:aviBvUaWAsiVtFUXtFbwVVpluUCUMrtB@trolley.proxy.rlwy.net:57861/railway")
+    
+    if db_url.startswith("mysql+pymysql://"):
+        parse_url = db_url.replace("mysql+pymysql://", "mysql://")
+    else:
+        parse_url = db_url
+        
+    url = urlparse(parse_url)
+    
+    # Extract connection parameters
+    user = url.username
+    password = url.password
+    host = url.hostname
+    port = url.port or 3306
+    database = url.path.lstrip('/')
+    
+    # Connect to the database
     return pymysql.connect(
-        host="localhost",
-        user="root",
-        password="",  
-        database="portfolio_db"
+        host=host,
+        user=user,
+        password=password,
+        port=port,
+        database=database
     )
 
 def get_top_portfolios(limit=5):

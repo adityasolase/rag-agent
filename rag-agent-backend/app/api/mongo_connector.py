@@ -1,9 +1,10 @@
-
+import os
 from pymongo import MongoClient
 
 def connect_mongo():
-    client = MongoClient("mongodb://localhost:27017/")
-    return client["portfolio_db"]
+    mongo_uri = os.getenv("MONGO_URI")
+    client = MongoClient(mongo_uri)
+    return client.get_default_database()
 
 def get_all_clients():
     db = connect_mongo()
