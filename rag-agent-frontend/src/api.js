@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 // Get API URL from environment or use a fallback
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://rag-agent-production.up.railway.app/';
+// Remove trailing slash to prevent double slash in URL
+const API_BASE_URL = (process.env.REACT_APP_API_URL || 'https://rag-agent-production.up.railway.app').replace(/\/$/, '');
 
 export const queryBackend = async (query) => {
   try {
