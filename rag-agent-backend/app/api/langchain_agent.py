@@ -6,18 +6,18 @@ from app.api.mongo_connector import get_all_clients, get_top_holders_from_mongo
 from app.api.mysql_connector import get_top_holders, get_top_portfolios, get_manager_breakup
 from app.api.response_format import format_response
 
-#Load environment variables
+
 load_dotenv()
 groq_api_key = os.getenv("GROQ_API_KEY")
 if not groq_api_key:
     raise ValueError("GROQ_API_KEY not found in environment!")
 
-#Setup logging
+
 log_level = os.getenv("LOGLEVEL", "INFO").upper()
 logging.basicConfig(level=getattr(logging, log_level), format='[%(asctime)s] %(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
-#Groq fallback handler
+
 def groq_chat(prompt: str, model="mixtral-8x7b-32768", temperature=0.7) -> str:
     try:
         logger.info("Sending request to Groq API...")
@@ -49,7 +49,7 @@ def groq_chat(prompt: str, model="mixtral-8x7b-32768", temperature=0.7) -> str:
         logger.error(f"Groq API Error: {e}")
         return f"Groq API Error: {e}"
 
-#Try to parse a markdown table from Groq output
+
 def parse_table_from_groq_output(output: str):
     logger.debug("Attempting to parse table from Groq output.")
     lines = output.strip().split('\n')
@@ -70,13 +70,13 @@ def parse_table_from_groq_output(output: str):
         return format_response("table", columns=columns, rows=rows)
     return None
 
-#Main handler for user queries
+
 async def process_nl_query(query: str):
     try:
         logger.info(f"Processing query: {query}")
         query_lower = query.lower()
 
-        #1. Holders of stock
+        
         if "holders of" in query_lower:
             stock = query_lower.split("holders of")[-1].strip()
             logger.info(f"Looking for holders of: {stock}")
@@ -91,13 +91,13 @@ async def process_nl_query(query: str):
 
             return format_response("text", f"No holders found for stock: {stock}")
 
-        #2. Top portfolios
+        
         if "top" in query_lower and "portfolios" in query_lower:
             logger.info("Fetching top 5 portfolios...")
             top_clients = get_top_portfolios(limit=5)
             return format_response("table", columns=["Client"], rows=[[c] for c in top_clients])
 
-        #3. Manager breakup
+        
         if "breakup" in query_lower and "manager" in query_lower:
             logger.info("Getting manager breakup...")
             managers = get_manager_breakup()
@@ -107,14 +107,14 @@ async def process_nl_query(query: str):
                 data=[m["value"] for m in managers]
             )
 
-        #4. Client profiles
+        
         if "client profiles" in query_lower:
             logger.info("Fetching client profiles...")
             profiles = get_all_clients()
             rows = [[p["name"], p["address"], p["risk_appetite"]] for p in profiles]
             return format_response("table", columns=["Name", "Address", "Risk"], rows=rows)
 
-        #5. Top relationship managers
+        
         if "top relationship manager" in query_lower:
             logger.info("Fetching top managers...")
             managers = get_manager_breakup()
@@ -122,7 +122,7 @@ async def process_nl_query(query: str):
             return format_response("table", columns=["Manager", "Total Value"],
                                    rows=[[m["manager"], m["value"]] for m in top])
 
-        #6. Fallback to Groq (open-ended)
+        
         logger.info("No match found. Using Groq fallback.")
         prompt = f"""You are an expert wealth management assistant. 
         Answer the following user query with business logic. 

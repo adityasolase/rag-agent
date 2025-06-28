@@ -6,4 +6,4 @@ def format_response(type, content=None, columns=None, rows=None, labels=None,dat
     elif type == "chart":
         return {"type": "chart", "labels": labels, "data": data}
     else:
-        return { "type": "text", "content": "⚠️ Unknown response format." }
+        return { "type": "text", "content": "Unknown response format." }

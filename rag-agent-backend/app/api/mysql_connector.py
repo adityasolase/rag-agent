@@ -4,7 +4,7 @@ def connect_db():
     return pymysql.connect(
         host="localhost",
         user="root",
-        password="",  # your MySQL password
+        password="",  
         database="portfolio_db"
     )
 

@@ -15,10 +15,10 @@ def get_top_holders_from_mongo(stock_name):
     db = connect_mongo()
     
     pipeline = [
-        {"$unwind": "$holdings"},  # Deconstruct array of holdings
-        {"$match": {"holdings.stock": {"$regex": stock_name, "$options": "i"}}},  # Case-insensitive match
-        {"$project": {"name": 1, "value": "$holdings.value"}},  # Select name + stock value
-        {"$sort": {"value": -1}},  # Descending by value
+        {"$unwind": "$holdings"},  
+        {"$match": {"holdings.stock": {"$regex": stock_name, "$options": "i"}}},  
+        {"$project": {"name": 1, "value": "$holdings.value"}},  
+        {"$sort": {"value": -1}},  
         {"$limit": 10}
     ]
 
