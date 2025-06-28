@@ -1,0 +1,96 @@
+**Future Vision Design: Natural Language Wealth Data Query Agent**
+
+
+
+##Purpose
+
+To show how the system can be enhanced over time for better performance, scalability, maintainability, and advanced insights using LangChain, MCP (Model Context Protocol), and modern cloud-native tools.
+
+
+
+##Future Vision Architecture Overview
+
+### 1. **Frontend (ReactJS)**
+* Modular Components: InputBox, TableOutput, ChartOutput, TextOutput
+* Query Optimizer: Suggests query refinements based on history
+* Role-based Dashboard (future): Admin view, Client view
+
+
+### 2. **Backend (Python + FastAPI + LangChain)**
+* **Router Layer**: Handles incoming NL query
+* **Intent Parser Layer**:
+  * Extracts entities (e.g. stock names, client names)
+  * Detects query type (e.g. chart, table, text)
+* **Data Source Layer**:
+  * MySQL - Transaction Data (Portfolio Holdings)
+  * MongoDB - Client Profiles (Risk, Address)
+* **AI Layer**:
+  * LangChain MCP Router:
+    * Route 1: Data Query Chain
+    * Route 2: Custom ToolChain (summarizer, evaluator)
+    * Route 3: Groq LLM fallback (with explanation)
+
+
+### 3. **Model Context Protocol (MCP)**
+* Context Windowing:
+  * Use metadata (who asked, when, what past query was)
+* Memory Store:
+  * Store query histories
+  * Auto-suggest improvements to recurring queries
+* Adaptive Routing:
+  * Low complexity → DB-only query
+  * Medium → Data + AI summary
+  * High → AI Reasoning + Data merge
+
+
+### 4. **Cloud / Infra Layer** (Optional if time allows)
+* GCP/AWS Hosting: Backend + Mongo + MySQL
+* CI/CD with GitHub Actions
+* API Gateway: For query throttling
+* Redis Cache: For frequently asked queries
+
+
+
+
+## Diagram Structure for Lucidchart
+
+### Main Blocks:
+
+[User UI: ReactJS]
+     |
+     v
+[FastAPI Router]
+     |
+     v
+[LangChain MCP Router]
+     |
+  +--|---------------------------+
+  |  |                           |
+  |  v                           v
+[MySQL Query]             [MongoDB Query]
+  |                             |
+  +--------------+--------------+
+                 |
+                 v
+         [Intent + Context Handler]
+                 |
+           +-----+------+
+           |            |
+           v            v
+ [LLM Reasoning]    [Table/Chart Formatter]
+           |            |
+           +-----+------+
+                 |
+                 v
+         [Final Response Output]
+
+
+
+## Future Enhancements
+* **Add Admin Dashboard** to monitor top portfolios, clients
+* **Natural Language Alerts**: "Notify me when a client's portfolio drops below X"
+* **Vector RAG Store** for internal reports, PDFs, or analyst notes
+* **Advanced LLM Switcher**: If Groq fails, fallback to Gemini or Mistral
+* **Data Encryption + Auth**: Add OAuth2 / JWT for secure access
+
+
