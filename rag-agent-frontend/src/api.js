@@ -1,9 +1,11 @@
 import axios from 'axios';
 
-const API_BASE_URL = window._env_?.API_URL || process.env.REACT_APP_API_URL;
+// Get API URL from environment or use a fallback
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'https://rag-agent-production.up.railway.app/';
 
 export const queryBackend = async (query) => {
   try {
+    console.log(`Connecting to backend at: ${API_BASE_URL}`);
     const response = await axios.post(`${API_BASE_URL}/api/query`, { query });
 
     if (response?.data?.type) {
